@@ -30,6 +30,7 @@ a:visited {
 }
 
 span {
+  display: inline;
   color: #ff1744;
 }
 
@@ -45,6 +46,10 @@ span {
 .container-buttons {
   display: flex;
   gap: 10px;
+}
+
+.container-scores {
+  display: block;
 }
 
 p {

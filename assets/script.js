@@ -5,10 +5,19 @@ var text = document.querySelector("#text");
 var container = document.querySelector(".container");
 var form = document.querySelector("form");
 var answer = document.querySelector("#answer");
+var input = document.querySelector("input");
+var link = document.querySelector("a");
 
 btn.addEventListener("click", handleClick);
 
+link.addEventListener("click", function (event) {
+  event.preventDefault();
+  highScores();
+});
+
 showForm(form.getAttribute("state"));
+
+var highScoresArray = [];
 
 function handleClick(e) {
   e.preventDefault();
@@ -76,9 +85,14 @@ function showForm(state) {
 }
 
 function highScores() {
+  text.innerHTML = "";
+  answer.innerHTML = "";
   header.innerHTML = "HIGH SCORES";
 
   clearButtons();
+
+  form.setAttribute("state", "hidden");
+  showForm(form.getAttribute("state"));
 
   document.querySelector("a").style.display = "none";
   document.querySelector("p").style.display = "none";
@@ -88,6 +102,22 @@ function highScores() {
   a.setAttribute("href", "./index.html");
 
   document.querySelector("header").appendChild(a);
+
+  var scores = JSON.parse(localStorage.getItem("scores"));
+
+  for (i = 0; i < scores.length; i++) {
+    var initials = document.createElement("span");
+    var time = document.createElement("span");
+
+    initials.innerHTML = scores[i].initials;
+    time.innerHTML = scores[i].time + "s";
+
+    var containerScores = document.createElement("div");
+    containerScores.setAttribute("class", ".container-scores");
+    document.querySelector(".container-scores").appendChild(containerScores);
+    containerScores.appendChild(initials);
+    containerScores.appendChild(time);
+  }
 }
 
 function getHighScore() {
@@ -112,7 +142,18 @@ function getHighScore() {
 
   var submit = document.createElement("button");
   submit.innerHTML = "Submit";
-  submit.addEventListener("click", function () {});
+  submit.addEventListener("click", function (event) {
+    event.preventDefault();
+    if (localStorage.getItem("scores")) {
+      var highScoresArray = JSON.parse(localStorage.getItem("scores"));
+    }
+    highScoresArray.push({
+      initials: input.value.toUpperCase().slice(0, 2),
+      time: timer.innerHTML,
+    });
+    localStorage.setItem("scores", JSON.stringify(highScoresArray));
+    highScores();
+  });
   document.querySelector(".container-buttons").appendChild(submit);
 }
 
