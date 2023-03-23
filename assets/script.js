@@ -84,17 +84,45 @@ function showForm(state) {
   }
 }
 
+//from StackOverflow
+function compare(a, b) {
+  if (a.time > b.time) return -1;
+  if (a.time < b.time) return 1;
+  return 0;
+}
+
+function renderScores(scores) {
+  if (scores) {
+    for (i = 0; i < scores.length; i++) {
+      var initials = document.createElement("span");
+      var time = document.createElement("span");
+
+      initials.innerHTML = scores[i].initials;
+      time.innerHTML = scores[i].time + "s";
+
+      var containerScores = document.createElement("div");
+      containerScores.setAttribute("class", ".container-scores");
+      document.querySelector(".container-scores").appendChild(containerScores);
+      containerScores.appendChild(initials);
+      containerScores.appendChild(time);
+    }
+  } else {
+    document.querySelector(".container-scores").remove();
+  }
+}
+
 function highScores() {
   text.innerHTML = "";
   answer.innerHTML = "";
   header.innerHTML = "HIGH SCORES";
+  document.querySelector("a").remove();
 
   clearButtons();
 
   form.setAttribute("state", "hidden");
   showForm(form.getAttribute("state"));
 
-  document.querySelector("a").style.display = "none";
+  // document.querySelector("a").style.display = "none";
   document.querySelector("p").style.display = "none";
 
   var a = document.createElement("a");
@@ -103,21 +131,16 @@ function highScores() {
 
   document.querySelector("header").appendChild(a);
 
-  var scores = JSON.parse(localStorage.getItem("scores"));
+  renderScores(JSON.parse(localStorage.getItem("scores")));
 
-  for (i = 0; i < scores.length; i++) {
-    var initials = document.createElement("span");
-    var time = document.createElement("span");
+  createButton("Clear Scores", function () {
+    localStorage.clear();
+    renderScores(localStorage.getItem("scores"));
+  });
 
-    initials.innerHTML = scores[i].initials;
-    time.innerHTML = scores[i].time + "s";
-
-    var containerScores = document.createElement("div");
-    containerScores.setAttribute("class", ".container-scores");
-    document.querySelector(".container-scores").appendChild(containerScores);
-    containerScores.appendChild(initials);
-    containerScores.appendChild(time);
-  }
+  createButton("Go Back", function () {
+    document.location.href = "./index.html";
+  });
 }
 
 function getHighScore() {
@@ -145,13 +168,16 @@ function getHighScore() {
   submit.addEventListener("click", function (event) {
     event.preventDefault();
     if (localStorage.getItem("scores")) {
-      var highScoresArray = JSON.parse(localStorage.getItem("scores"));
+      highScoresArray = JSON.parse(localStorage.getItem("scores"));
     }
     highScoresArray.push({
       initials: input.value.toUpperCase().slice(0, 2),
       time: timer.innerHTML,
     });
-    localStorage.setItem("scores", JSON.stringify(highScoresArray));
+    localStorage.setItem(
+      "scores",
+      JSON.stringify(highScoresArray.sort(compare))
+    );
     highScores();
   });
   document.querySelector(".container-buttons").appendChild(submit);

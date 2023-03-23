@@ -1,5 +1,6 @@
 :root {
   --blue: #2196f3;
+  --light-blue: #4dabf5;
   --orange: #ff9100;
   --dark: #121212;
 }
@@ -29,6 +30,10 @@ a:visited {
   color: var(--orange);
 }
 
+a:hover {
+  color: var(--light-blue);
+}
+
 span {
   display: inline;
   color: #ff1744;
@@ -46,6 +51,7 @@ span {
 .container-buttons {
   display: flex;
   gap: 10px;
+  width: 230px;
 }
 
 .container-scores {
@@ -72,7 +78,20 @@ button {
   width: 150px;
 }
 
+button:hover {
+  background-color: var(--light-blue);
+}
+
+button:active {
+  background-color: #1769aa;
+}
+
 h2 {
   color: white;
   margin: 0 4em 0 4em;
+}
+
+input {
+  border-style: dashed;
+  padding: 10px;
 }
