@@ -42,6 +42,11 @@ span {
   color: white;
 }
 
+.container-buttons {
+  display: flex;
+  gap: 10px;
+}
+
 p {
   color: white;
   text-align: center;
