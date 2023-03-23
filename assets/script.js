@@ -4,6 +4,7 @@ var header = document.querySelector("#header");
 var text = document.querySelector("#text");
 var container = document.querySelector(".container");
 var form = document.querySelector("form");
+var answer = document.querySelector("#answer");
 
 btn.addEventListener("click", handleClick);
 
@@ -19,10 +20,10 @@ function handleClick(e) {
 }
 
 function loseGame() {
+  clearInterval(clock);
   timer.innerHTML = 0;
   clearButtons();
-  header.innerHTML = "Time's up! The game's over!";
-  clearInterval(clock);
+  getHighScore();
   return;
 }
 
@@ -37,9 +38,18 @@ function tick() {
 function tick10() {
   if (timer.innerHTML >= 10) {
     timer.innerHTML -= 10;
+    wrongAnswer();
   } else {
     loseGame();
   }
+}
+
+function wrongAnswer() {
+  answer.innerHTML = "Wrong answer!";
+}
+
+function correctAnswer() {
+  answer.innerHTML = "Correct!";
 }
 
 function createButton(text, callback) {
@@ -81,6 +91,7 @@ function highScores() {
 }
 
 function getHighScore() {
+  answer.innerHTML = "";
   header.innerHTML = `Your high score is: ${timer.innerHTML}s`;
 
   clearButtons();
@@ -108,6 +119,7 @@ function getHighScore() {
 function question1() {
   text.style.display = "none";
   btn.style.display = "none";
+
   container.setAttribute("style", "align-items: start;");
   header.innerHTML =
     "Which of the following is NOT a primitive data type in JavaScript?";
@@ -119,6 +131,8 @@ function question1() {
 }
 
 function question2() {
+  correctAnswer();
+
   header.innerHTML = "How do you find the minimum of x and y using JavaScript?";
 
   clearButtons();
@@ -130,6 +144,8 @@ function question2() {
 }
 
 function question3() {
+  correctAnswer();
+
   header.innerHTML = "What will the code return?\n(3 < 7)";
 
   clearButtons();
@@ -141,6 +157,8 @@ function question3() {
 }
 
 function question4() {
+  correctAnswer();
+
   header.innerHTML =
     "Which statement CANNOT be used to declare a variable in JavaScript?";
 
