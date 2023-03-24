@@ -7,6 +7,7 @@ var form = document.querySelector("form");
 var answer = document.querySelector("#answer");
 var input = document.querySelector("input");
 var link = document.querySelector("a");
+var buttonContainer = document.querySelector(".container-buttons");
 
 btn.addEventListener("click", handleClick);
 
@@ -32,8 +33,12 @@ function loseGame() {
   clearInterval(clock);
   timer.innerHTML = 0;
   clearButtons();
-  getHighScore();
-  return;
+  container.setAttribute("style", "align-items: center;");
+  header.innerHTML = "Sorry, you lost on time. Would you like to play again?";
+  answer.style.display = "none";
+  createButton("Play Again", function () {
+    document.location.href = "./index.html";
+  });
 }
 
 function tick() {
@@ -84,7 +89,7 @@ function showForm(state) {
   }
 }
 
-//from StackOverflow
+//Sorting function (from StackOverflow)
 function compare(a, b) {
   if (a.time > b.time) return -1;
   if (a.time < b.time) return 1;
@@ -112,7 +117,8 @@ function renderScores(scores) {
 }
 
 function highScores() {
-  text.innerHTML = "";
+  container.setAttribute("style", "align-items: center;");
+  text.style.display = "none";
   answer.innerHTML = "";
   header.innerHTML = "HIGH SCORES";
   document.querySelector("a").remove();
@@ -128,7 +134,6 @@ function highScores() {
   var a = document.createElement("a");
   a.innerHTML = "Take Quiz";
   a.setAttribute("href", "./index.html");
-
   document.querySelector("header").appendChild(a);
 
   renderScores(JSON.parse(localStorage.getItem("scores")));
@@ -144,6 +149,7 @@ function highScores() {
 }
 
 function getHighScore() {
+  container.setAttribute("style", "align-items: center;");
   answer.innerHTML = "";
   header.innerHTML = `Your high score is: ${timer.innerHTML}s`;
 
@@ -161,7 +167,7 @@ function getHighScore() {
   back.addEventListener("click", function () {
     document.location.href = "./index.html";
   });
-  document.querySelector(".container-buttons").appendChild(back);
+  buttonContainer.appendChild(back);
 
   var submit = document.createElement("button");
   submit.innerHTML = "Submit";
@@ -180,7 +186,7 @@ function getHighScore() {
     );
     highScores();
   });
-  document.querySelector(".container-buttons").appendChild(submit);
+  buttonContainer.appendChild(submit);
 }
 
 function question1() {

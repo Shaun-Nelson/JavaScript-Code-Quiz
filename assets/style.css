@@ -43,6 +43,7 @@ span {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   margin-top: 2em;
   margin: 2em 4em 0 4em;
   color: white;
@@ -55,7 +56,10 @@ span {
 }
 
 .container-scores {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 p {
@@ -68,6 +72,10 @@ p {
   padding: 1.5em;
 }
 
+#answer {
+  margin: 0 3em 0 3em;
+}
+
 button {
   margin-top: 1.3em;
   background-color: var(--blue);
@@ -76,6 +84,7 @@ button {
   border: none;
   border-radius: 10px;
   width: 150px;
+  cursor: pointer;
 }
 
 button:hover {
@@ -94,4 +103,14 @@ h2 {
 input {
   border-style: dashed;
   padding: 10px;
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    margin: 0 auto;
+  }
+
+  #text {
+    margin: 0 auto;
+  }
 }
