@@ -1,8 +1,8 @@
-# UofT Bootcamp Module 1 Challenge
+# UofT Bootcamp Module 4 Challenge
 
 ## Table of Contents
 
-- [UofT Bootcamp Module 1 Challenge](#uoft-bootcamp-module-1-challenge)
+- [UofT Bootcamp Module 4 Challenge](#uoft-bootcamp-module-4-challenge)
   - [Table of Contents](#table-of-contents)
   - [Description](#description)
   - [GitHub Pages](#github-pages)

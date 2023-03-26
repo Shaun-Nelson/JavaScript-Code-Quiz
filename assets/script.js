@@ -9,18 +9,18 @@ var input = document.querySelector("input");
 var link = document.querySelector("a");
 var buttonContainer = document.querySelector(".container-buttons");
 
-btn.addEventListener("click", handleClick);
+btn.addEventListener("click", startGame);
 
 link.addEventListener("click", function (event) {
   event.preventDefault();
   highScores();
 });
 
-showForm(form.getAttribute("state"));
+toggleForm(form.getAttribute("state"));
 
 var highScoresArray = [];
 
-function handleClick(e) {
+function startGame(e) {
   e.preventDefault();
 
   //Initializing clock as global variable to be used in other functions.
@@ -81,7 +81,7 @@ function clearButtons() {
   }
 }
 
-function showForm(state) {
+function toggleForm(state) {
   if (state === "show") {
     form.style.display = "block";
   } else {
@@ -89,11 +89,24 @@ function showForm(state) {
   }
 }
 
-//Sorting function (from StackOverflow)
+//Sorting function used for high scores (from StackOverflow)
 function compare(a, b) {
   if (a.time > b.time) return -1;
   if (a.time < b.time) return 1;
   return 0;
+}
+
+function saveScore() {
+  if (localStorage.getItem("scores")) {
+    highScoresArray = JSON.parse(localStorage.getItem("scores"));
+  }
+  highScoresArray.push({
+    initials: input.value.toUpperCase().slice(0, 2),
+    time: timer.innerHTML,
+  });
+  localStorage.setItem("scores", JSON.stringify(highScoresArray.sort(compare)));
+
+  highScores();
 }
 
 function renderScores(scores) {
@@ -118,7 +131,7 @@ function renderScores(scores) {
 
 function highScores() {
   container.setAttribute("style", "align-items: center;");
-  text.style.display = "none";
+  text.setAttribute("style", "display: none");
   answer.innerHTML = "";
   header.innerHTML = "HIGH SCORES";
   document.querySelector("a").remove();
@@ -126,7 +139,7 @@ function highScores() {
   clearButtons();
 
   form.setAttribute("state", "hidden");
-  showForm(form.getAttribute("state"));
+  toggleForm(form.getAttribute("state"));
 
   // document.querySelector("a").style.display = "none";
   document.querySelector("p").style.display = "none";
@@ -152,13 +165,15 @@ function getHighScore() {
   container.setAttribute("style", "align-items: center;");
   answer.innerHTML = "";
   header.innerHTML = `Your high score is: ${timer.innerHTML}s`;
+  text.setAttribute("style", "display: contents");
+  text.innerHTML = "Please enter your initials and click Submit.";
 
   clearButtons();
 
   clearInterval(clock);
 
   form.setAttribute("state", "show");
-  showForm(form.getAttribute("state"));
+  toggleForm(form.getAttribute("state"));
 
   var back = document.createElement("button");
   back.innerHTML = "Go Back";
@@ -173,20 +188,18 @@ function getHighScore() {
   submit.innerHTML = "Submit";
   submit.addEventListener("click", function (event) {
     event.preventDefault();
-    if (localStorage.getItem("scores")) {
-      highScoresArray = JSON.parse(localStorage.getItem("scores"));
-    }
-    highScoresArray.push({
-      initials: input.value.toUpperCase().slice(0, 2),
-      time: timer.innerHTML,
-    });
-    localStorage.setItem(
-      "scores",
-      JSON.stringify(highScoresArray.sort(compare))
-    );
-    highScores();
+
+    saveScore();
   });
   buttonContainer.appendChild(submit);
+
+  input.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+
+      saveScore();
+    }
+  });
 }
 
 function question1() {
