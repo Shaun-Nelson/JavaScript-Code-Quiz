@@ -1,8 +1,8 @@
-# UofT Bootcamp Module 4 Challenge
+# JavaScript Code Quiz
 
 ## Table of Contents
 
-- [UofT Bootcamp Module 4 Challenge](#uoft-bootcamp-module-4-challenge)
+- [JavaScript Code Quiz](#javascript-code-quiz)
   - [Table of Contents](#table-of-contents)
   - [Description](#description)
   - [GitHub Pages](#github-pages)
@@ -17,11 +17,11 @@ A timed quiz on JavaScript fundamentals that stores high scores.
 
 ## GitHub Pages
 
-https://shaun-nelson.github.io/bootcamp-module-4-challenge/
+https://shaun-nelson.github.io/JavaScript-Code-Quiz/
 
 ## GitHub Repository
 
-https://github.com/Shaun-Nelson/bootcamp-module-4-challenge
+https://github.com/Shaun-Nelson/JavaScript-Code-Quiz
 
 ## Preview Screenshot
 
@@ -39,7 +39,7 @@ https://stackoverflow.com/questions/1129216/sort-array-of-objects-by-string-prop
 
 MIT License
 
-Copyright (c) 2023 Shaun-Nelson
+Copyright (c) 2023 Shaun Nelson
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

@@ -1,6 +1,6 @@
 var btn = document.querySelector("button");
 var timer = document.querySelector(".timer");
-var header = document.querySelector("#header");
+var mainHeading = document.querySelector("#main-heading");
 var text = document.querySelector("#text");
 var container = document.querySelector(".container");
 var form = document.querySelector("form");
@@ -8,6 +8,7 @@ var answer = document.querySelector("#answer");
 var input = document.querySelector("input");
 var link = document.querySelector("a");
 var buttonContainer = document.querySelector(".container-buttons");
+var highScoresArray = [];
 
 btn.addEventListener("click", startGame);
 
@@ -16,9 +17,8 @@ link.addEventListener("click", function (event) {
   highScores();
 });
 
+// Toggles whether high score form is hidden or not based on form attribute "state"
 toggleForm(form.getAttribute("state"));
-
-var highScoresArray = [];
 
 function startGame(e) {
   e.preventDefault();
@@ -31,16 +31,20 @@ function startGame(e) {
 
 function loseGame() {
   clearInterval(clock);
-  timer.innerHTML = 0;
   clearButtons();
+  timer.innerHTML = 0;
+  mainHeading.innerHTML =
+    "Sorry, you lost on time. Would you like to play again?";
   container.setAttribute("style", "align-items: center;");
-  header.innerHTML = "Sorry, you lost on time. Would you like to play again?";
   answer.style.display = "none";
+
   createButton("Play Again", function () {
+    //from StackOverflow: button goes back to home page
     document.location.href = "./index.html";
   });
 }
 
+//Ticks down clock by 1 second. If timer reaches 0, the game is lost.
 function tick() {
   if (timer.innerHTML > 0) {
     timer.innerHTML -= 1;
@@ -49,6 +53,7 @@ function tick() {
   }
 }
 
+//Ticks down clock by 10 seconds for a wrong answer. If timer reaches 0, the game is lost.
 function tick10() {
   if (timer.innerHTML >= 10) {
     timer.innerHTML -= 10;
@@ -66,6 +71,7 @@ function correctAnswer() {
   answer.innerHTML = "Correct!";
 }
 
+//Creates a button in the main flexbox container with given text and callback function on click
 function createButton(text, callback) {
   var button = document.createElement("button");
   button.innerHTML = text;
@@ -73,6 +79,7 @@ function createButton(text, callback) {
   container.appendChild(button);
 }
 
+//Hides all buttons
 function clearButtons() {
   var buttons = document.querySelectorAll("button");
 
@@ -81,6 +88,7 @@ function clearButtons() {
   }
 }
 
+// Toggles whether high score form is hidden or not based on form attribute "state"
 function toggleForm(state) {
   if (state === "show") {
     form.style.display = "block";
@@ -96,6 +104,7 @@ function compare(a, b) {
   return 0;
 }
 
+//Gets high scores saved in local storage (if any) and appends high score to sorted array, which is then saved in local storage
 function saveScore() {
   if (localStorage.getItem("scores")) {
     highScoresArray = JSON.parse(localStorage.getItem("scores"));
@@ -118,6 +127,7 @@ function renderScores(scores) {
       initials.innerHTML = scores[i].initials;
       time.innerHTML = scores[i].time + "s";
 
+      //Creates a container for high scores and appends each high score within
       var containerScores = document.createElement("div");
       containerScores.setAttribute("class", ".container-scores");
       document.querySelector(".container-scores").appendChild(containerScores);
@@ -125,32 +135,36 @@ function renderScores(scores) {
       containerScores.appendChild(time);
     }
   } else {
+    //Removes empty container in case of no high scores to clear screen space
     document.querySelector(".container-scores").remove();
   }
 }
 
+//Shows the high scores page
 function highScores() {
   container.setAttribute("style", "align-items: center;");
   text.setAttribute("style", "display: none");
   answer.innerHTML = "";
-  header.innerHTML = "HIGH SCORES";
+  mainHeading.innerHTML = "HIGH SCORES";
   document.querySelector("a").remove();
+  document.querySelector("p").style.display = "none";
 
   clearButtons();
 
+  //Hides form for entering initials
   form.setAttribute("state", "hidden");
   toggleForm(form.getAttribute("state"));
 
-  // document.querySelector("a").style.display = "none";
-  document.querySelector("p").style.display = "none";
-
+  //Creates a link in the header to return to home page
   var a = document.createElement("a");
   a.innerHTML = "Take Quiz";
   a.setAttribute("href", "./index.html");
   document.querySelector("header").appendChild(a);
 
+  //Renders high scores to the page using scores saved in local storage (if any)
   renderScores(JSON.parse(localStorage.getItem("scores")));
 
+  //Clears high scores from local storage
   createButton("Clear Scores", function () {
     localStorage.clear();
     renderScores(localStorage.getItem("scores"));
@@ -162,37 +176,40 @@ function highScores() {
 }
 
 function getHighScore() {
-  container.setAttribute("style", "align-items: center;");
   answer.innerHTML = "";
-  header.innerHTML = `Your high score is: ${timer.innerHTML}s`;
-  text.setAttribute("style", "display: contents");
+  mainHeading.innerHTML = `Your high score is: ${timer.innerHTML}s`;
   text.innerHTML = "Please enter your initials and click Submit.";
+  text.setAttribute("style", "display: contents");
+  container.setAttribute("style", "align-items: center;");
 
   clearButtons();
 
   clearInterval(clock);
 
+  //Shows form for entering initials
   form.setAttribute("state", "show");
   toggleForm(form.getAttribute("state"));
 
+  //Creates button to go back to home page
   var back = document.createElement("button");
   back.innerHTML = "Go Back";
-
-  //from StackOverflow
   back.addEventListener("click", function () {
     document.location.href = "./index.html";
   });
   buttonContainer.appendChild(back);
 
+  //Creates button to submit form and save high score to local storage
   var submit = document.createElement("button");
   submit.innerHTML = "Submit";
   submit.addEventListener("click", function (event) {
+    //Prevents page refresh on click
     event.preventDefault();
 
     saveScore();
   });
   buttonContainer.appendChild(submit);
 
+  //Saves high score to local storage if entering via keyboard
   input.addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -202,12 +219,15 @@ function getHighScore() {
   });
 }
 
+//Correct answer go to next question. Wrong answers subtract 10 seconds from clock.
+//Once all questions are answered, form to enter and save high scores is rendered
+
 function question1() {
   text.style.display = "none";
   btn.style.display = "none";
 
   container.setAttribute("style", "align-items: start;");
-  header.innerHTML =
+  mainHeading.innerHTML =
     "Which of the following is NOT a primitive data type in JavaScript?";
 
   createButton("String", tick10);
@@ -219,7 +239,8 @@ function question1() {
 function question2() {
   correctAnswer();
 
-  header.innerHTML = "How do you find the minimum of x and y using JavaScript?";
+  mainHeading.innerHTML =
+    "How do you find the minimum of x and y using JavaScript?";
 
   clearButtons();
 
@@ -232,7 +253,7 @@ function question2() {
 function question3() {
   correctAnswer();
 
-  header.innerHTML = "What will the code return?\n(3 < 7)";
+  mainHeading.innerHTML = "What will the code return?\n(3 < 7)";
 
   clearButtons();
 
@@ -245,7 +266,7 @@ function question3() {
 function question4() {
   correctAnswer();
 
-  header.innerHTML =
+  mainHeading.innerHTML =
     "Which statement CANNOT be used to declare a variable in JavaScript?";
 
   clearButtons();
